@@ -6,6 +6,7 @@ import Routes from './routes/Routes';
 import PageMeta from './components/common/PageMeta';
 // import { useDeployVersionCheck } from './hooks/useDeployVersionCheck';
 import { useServiceWorkerUpdater } from './sw-update-listener';
+import { UpdateBanner } from './components/common/DesktopUpdateBanner';
 
 const isDesktop =
   typeof window !== 'undefined' && !!(window as any).electronAPI;
@@ -31,6 +32,7 @@ export default function App() {
         autoClose={false}
         closeOnClick={false}
       />
+      <UpdateBanner />
     </>
   );
 }

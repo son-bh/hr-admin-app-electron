@@ -6,6 +6,7 @@ import { useLogoutMutation } from '@/services';
 import { USER_ROLE } from '@/configs';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import { IS_DESKTOP } from '@/shared/constants';
+import AvatarDefaultSrc from '../../assets/images/user/avatar.avif';
 
 export default function UserDropdown() {
   const { user: userInfo } = useUserInfo();
@@ -44,7 +45,7 @@ export default function UserDropdown() {
         className='flex items-center text-gray-700 dropdown-toggle dark:text-gray-400'
       >
         <span className='mr-3 overflow-hidden rounded-full h-11 w-11'>
-          <img src='/images/user/avatar.avif' alt='User' />
+          <img src={AvatarDefaultSrc} alt='User' />
         </span>
 
         <span className='block mr-1 font-medium text-theme-sm'>

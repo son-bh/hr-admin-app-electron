@@ -1,11 +1,18 @@
 import { app, BrowserWindow } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import { join } from 'node:path';
 import { registerIpcHandlers } from './ipcHandlers';
+import { setupAutoUpdate } from './setupAutoUpdate';
 
 const isDev = !app.isPackaged;
-let mainWindow: BrowserWindow | null = null;
 
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
+
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
+
+let mainWindow: BrowserWindow | null = null;
+const getWindow = () => mainWindow;
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
@@ -24,6 +31,8 @@ async function createWindow() {
   } else {
     await mainWindow.loadFile(join(__dirname, '../dist/index.html'));
   }
+
+  setupAutoUpdate(getWindow);
 
   mainWindow.webContents.on('did-finish-load', () => {
     console.log('Window finished loading');

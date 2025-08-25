@@ -9,12 +9,17 @@ export interface IElectronAPI {
 
   initToken: () => Promise<string | null>;
   saveToken: (t: string) => Promise<boolean>;
-  getToken: () => Promise<string | null>; // FIX: Promise
+  getToken: () => Promise<string | null>;
   removeToken: () => Promise<boolean>;
 
   saveUser: (u: IUser) => Promise<boolean>;
-  getUser: () => Promise<IUser | null>; // FIX: Promise
+  getUser: () => Promise<IUser | null>;
   removeUser: () => Promise<boolean>;
+
+  check: () => Promise<any>;
+  download: () => Promise<void>;
+  install: () => Promise<any>;
+  onStatus: (cb: (p: any) => void) => void;
 }
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -28,4 +33,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveUser: (user: IUser) => ipcRenderer.invoke('save-user', user),
   getUser: () => ipcRenderer.invoke('get-user'),
   removeUser: () => ipcRenderer.invoke('remove-user'),
+
+  // Auto update
+  check: () => ipcRenderer.invoke('update:check'),
+  download: () => ipcRenderer.invoke('update:download'),
+  install: () => ipcRenderer.invoke('update:install'),
+  onStatus: (cb: (p: any) => void) => {
+    const listener = (_e: any, payload: any) => cb(payload);
+    ipcRenderer.on('update:status', listener);
+    return () => ipcRenderer.removeListener('update:status', listener);
+  },
 });
