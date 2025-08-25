@@ -50,9 +50,9 @@ jobs:
           NODE_ENV: production
           VITE_API_URL: ${{ secrets.API_URL }}
         run: |
-          if [[ "${{ matrix.platform }}" == "macOS" ]]; then
+          if [[ "${{ matrix.platform }}" == "macos-latest" ]]; then
             npm run release -- --mac --x64 --arm64
-          elif [[ "${{ matrix.platform }}" == "Windows" ]]; then
+          elif [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
             npm run release -- --win
           fi
 
