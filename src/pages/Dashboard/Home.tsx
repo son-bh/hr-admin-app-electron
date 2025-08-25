@@ -4,6 +4,7 @@
 // import MonthlyTarget from "../../components/ecommerce/MonthlyTarget";
 // import RecentOrders from "../../components/ecommerce/RecentOrders";
 // import DemographicCard from "../../components/ecommerce/DemographicCard";
+import BGSrc from '../../assets/images/background/sign-in-bg.webp';
 
 import PageMeta from '@/components/common/PageMeta';
 // import { usePreloadImage } from '@/hooks/usePreloadImage';
@@ -18,7 +19,7 @@ export default function Home() {
       <PageMeta title='Quản lý nhân sự' description='Quản lý nhân sự' />
       <div className='flex flex-col items-center'>
         <div className='w-[400px]'>
-          <img src='/images/user/bg-main.webp' alt='User' />
+          <img src={BGSrc} alt='User' />
         </div>
         <h3 className='font-bold text-2xl mt-8'>
           Chào mừng <span className='text-brand-500'>{userInfo?.username}</span>{' '}
