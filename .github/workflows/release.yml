@@ -15,13 +15,7 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            platform: windows
-          - os: macos-latest # Apple Silicon (arm64)
-            platform: mac-arm64
-            arch: arm64
-          - os: macos-13 # Intel (x64)
-            platform: mac-x64
-            arch: x64
+          - os: macos-latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -51,16 +45,14 @@ jobs:
 
       - name: Build & Publish (unsigned)
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub PAT (repo)
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           ELECTRON: 'true'
           NODE_ENV: production
           VITE_API_URL: ${{ secrets.API_URL }}
         run: |
-          if [[ "${{ matrix.platform }}" == "mac-arm64" ]]; then
-            npm run release -- --mac --arm64
-          elif [[ "${{ matrix.platform }}" == "mac-x64" ]]; then
-            npm run release -- --mac --x64
-          elif [[ "${{ matrix.platform }}" == "windows" ]]; then
+          if [[ "${{ matrix.platform }}" == "macOS" ]]; then
+            npm run release -- --mac --x64 --arm64
+          elif [[ "${{ matrix.platform }}" == "Windows" ]]; then
             npm run release -- --win
           fi
 

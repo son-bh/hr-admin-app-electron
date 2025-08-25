@@ -1,0 +1,40 @@
+{
+  appId: 'com.yourcompany.yourapp',
+  productName: 'HR Admin',
+  directories: {
+    output: 'release',
+  },
+  files: [
+    'dist/**/*',
+    'dist-electron/**/*',
+    '!node_modules',
+    'node_modules/**/*',
+  ],
+  mac: {
+    target: ['dmg', 'zip'],
+    sign: false,
+    artifactName: '${productName}-Mac-${version}-Installer.${ext}',
+  },
+  win: {
+    target: [
+      {
+        target: 'nsis',
+        arch: ['x64'],
+      },
+    ],
+    artifactName: '${productName}-Windows-${version}-Setup.${ext}',
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+  publish: [
+    {
+      provider: 'github',
+      owner: 'son-bh',
+      repo: 'hr-admin-app-electron',
+    },
+  ],
+}
