@@ -4,7 +4,7 @@
 // import MonthlyTarget from "../../components/ecommerce/MonthlyTarget";
 // import RecentOrders from "../../components/ecommerce/RecentOrders";
 // import DemographicCard from "../../components/ecommerce/DemographicCard";
-import BGSrc from '../../assets/images/background/sign-in-bg.webp';
+import BGSrc from '../../assets/images/background/bg-main.webp';
 
 import PageMeta from '@/components/common/PageMeta';
 // import { usePreloadImage } from '@/hooks/usePreloadImage';
