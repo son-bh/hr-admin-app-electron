@@ -42,5 +42,6 @@
       "@/icons/*": ["src/icons/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "electron/preload.ts"],
+  "exclude": ["electron", "dist", "dist-electron", "node_modules"]
 }

@@ -1,18 +1,20 @@
 import { create } from 'zustand';
 import { IUser as IUserType } from '../types';
-import { CookiesStorage } from '@/shared/utils/cookie-storage';
-import { StorageKeys } from '@/shared/constants';
+import { getUserInfoStorage } from '@/shared/utils/helpers';
 
 interface IUser {
-  userInfo: IUserType;
+  userInfo: IUserType | null;
   setUserInfo: (userInfo: IUserType) => void;
+  loadUserInfo: () => Promise<void>;
 }
 
-const userInfo: IUserType = CookiesStorage.getCookieData(StorageKeys.UserInfo);
-
 const useUserStore = create<IUser>()(set => ({
-  userInfo: userInfo,
+  userInfo: null,
   setUserInfo: (userInfo: IUserType) => set(() => ({ userInfo: userInfo })),
+  loadUserInfo: async () => {
+    const userInfo = await getUserInfoStorage();
+    set({ userInfo });
+  },
 }));
 
 export default useUserStore;

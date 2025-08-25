@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CookiesStorage } from '../shared/utils/cookie-storage';
 import { io, Socket } from 'socket.io-client';
 import { API_BASE_URL } from '@/shared/constants/common';
+import { getAccessToken } from '@/shared/utils/helpers';
 
 const SOCKET_SERVER_URL = API_BASE_URL;
 const PING_INTERVAL = 30 * 1000; // 1 phút
@@ -21,6 +22,7 @@ export function useLiveSocketWithAutoLogout(
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const countdownRef = useRef<NodeJS.Timeout | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   const [isRunning, setIsRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timeoutMs);
@@ -59,7 +61,14 @@ export function useLiveSocketWithAutoLogout(
   };
 
   useEffect(() => {
-    const token = CookiesStorage.getAccessToken();
+    const checkAuth = async () => {
+      const token = await getAccessToken();
+      setToken(token);
+    };
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
     if (!token || !userId) return;
 
     // 1. Tạo socket
@@ -127,7 +136,7 @@ export function useLiveSocketWithAutoLogout(
 
       setIsRunning(false);
     };
-  }, [userId]);
+  }, [userId, token]);
 
   return {
     isRunning,

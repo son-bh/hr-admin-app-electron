@@ -73,10 +73,11 @@ export const useQueryUserDetail = (userId: string, options = {}) =>
     queryFn: () => getUserDetail(userId),
     ...options,
   });
-export const useQueryGetMe = () =>
+export const useQueryGetMe = (options = {}) =>
   useQuery({
     queryKey: ['GET_ME'],
     queryFn: () => getMe(),
+    ...options,
   });
 
 export const useAssignPermissionsMutation = () =>

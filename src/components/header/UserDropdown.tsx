@@ -1,13 +1,14 @@
-import { StorageKeys } from '@/shared/constants';
 import { CookiesStorage } from '@/shared/utils/cookie-storage';
 import { useState } from 'react';
 import { Dropdown } from '../ui/dropdown/Dropdown';
 import { DropdownItem } from '../ui/dropdown/DropdownItem';
 import { useLogoutMutation } from '@/services';
 import { USER_ROLE } from '@/configs';
+import { useUserInfo } from '@/hooks/useUserInfo';
+import { IS_DESKTOP } from '@/shared/constants';
 
 export default function UserDropdown() {
-  const userInfo = CookiesStorage.getCookieData(StorageKeys.UserInfo);
+  const { user: userInfo } = useUserInfo();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,7 +27,14 @@ export default function UserDropdown() {
     await logoutMutation.mutateAsync(undefined);
 
     CookiesStorage.clearSession();
-    window.location.href = '/login';
+    await window?.electronAPI?.removeToken();
+    await window?.electronAPI?.removeUser();
+
+    if (IS_DESKTOP) {
+      window.location.hash = '/login';
+    } else {
+      window.location.href = '/login';
+    }
   };
 
   return (
@@ -72,9 +80,11 @@ export default function UserDropdown() {
             {userInfo?.username}
           </span>
           <div className='flex items-center mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400 gap-2'>
-            <p className='text-gray-500 dark:text-gray-400'>
-              {USER_ROLE[userInfo.role as keyof typeof USER_ROLE] || '--'}
-            </p>
+            {userInfo?.role && (
+              <p className='text-gray-500 dark:text-gray-400'>
+                {USER_ROLE[userInfo.role as keyof typeof USER_ROLE] || '--'}
+              </p>
+            )}
             <div className='hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block'></div>
             <p className='text-gray-500 dark:text-gray-400'>
               {userInfo?.team || '--'}

@@ -9,7 +9,7 @@ import { CookiesStorage } from '../../shared/utils/cookie-storage';
 import { StorageKeys } from '../../shared/constants/storage-keys';
 import useUserStore from '../../store/userStore';
 import { PATH_NAME } from '../../configs';
-import { ErrorForm } from '@/shared/constants';
+import { ErrorForm, IS_DESKTOP } from '@/shared/constants';
 import { useState } from 'react';
 import { EyeCloseIcon, EyeIcon } from '@/icons';
 
@@ -44,14 +44,20 @@ export default function SignInForm() {
         onSuccess: response => {
           const { data, token } = response || {};
 
-          CookiesStorage.setCookieData(StorageKeys.AccessToken, token);
-          CookiesStorage.setCookieData(
-            StorageKeys.UserInfo,
-            JSON.stringify(data)
-          );
+          if (IS_DESKTOP) {
+            window.electronAPI?.saveToken?.(token);
+            window.electronAPI?.saveUser?.(data);
+          } else {
+            CookiesStorage.setCookieData(StorageKeys.AccessToken, token);
+            CookiesStorage.setCookieData(
+              StorageKeys.UserInfo,
+              JSON.stringify(data)
+            );
+          }
+
           setUserInfo(data);
 
-          navigate(PATH_NAME.HOME);
+          navigate(PATH_NAME.HOME, { replace: true });
         },
       }
     );

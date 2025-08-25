@@ -1,4 +1,13 @@
 /// <reference types="vite/client" />
+/// <reference types="vite-plugin-pwa/client" />
+
+import { IElectronAPI } from 'electron/preload';
+
+declare global {
+  interface Window {
+    electronAPI?: IElectronAPI;
+  }
+}
 
 declare module 'virtual:pwa-register/react' {
   import type { Dispatch, SetStateAction } from 'react';
@@ -19,3 +28,5 @@ declare module 'virtual:pwa-register/react' {
     updateServiceWorker: (reloadPage?: boolean) => Promise<void>;
   };
 }
+
+export {};

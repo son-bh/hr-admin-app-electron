@@ -1,5 +1,7 @@
 import { IUser, PERMISSIONS, UserAgentInfo } from '@/types';
 import { isBefore, parse, startOfDay } from 'date-fns';
+import { IS_DESKTOP, StorageKeys } from '../constants';
+import { CookiesStorage } from './cookie-storage';
 
 export const formatVND = (amount: number) => {
   return new Intl.NumberFormat('vi-VN', {
@@ -119,3 +121,18 @@ export const checkIsDisableSelectByPermission = (
 
 export const parseDate = (date: string, format: string = 'dd/MM/yyyy') =>
   parse(date, format, new Date());
+
+export const getUserInfoStorage = async () => {
+  if (IS_DESKTOP) {
+    return await window.electronAPI?.getUser();
+  }
+
+  return CookiesStorage.getCookieData(StorageKeys.UserInfo);
+};
+
+export const getAccessToken = async (): Promise<string | null> => {
+  if (IS_DESKTOP) {
+    return (await window.electronAPI?.getToken?.()) ?? null;
+  }
+  return CookiesStorage.getAccessToken() ?? null;
+};

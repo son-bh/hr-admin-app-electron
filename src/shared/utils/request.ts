@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { API_BASE_URL, ToastType } from '../constants/common';
+import { API_BASE_URL, IS_DESKTOP, ToastType } from '../constants/common';
 import { CookiesStorage } from './cookie-storage';
 import { toast } from '../../components/toast';
 import { ErrorApi } from '../constants/error';
@@ -31,8 +31,10 @@ const axiosConfig = {
 export const request = axios.create(axiosConfig);
 
 request.interceptors.request.use(
-  function (config) {
-    const accessToken = CookiesStorage.getAccessToken();
+  async function (config) {
+    const desktopToken = (await window.electronAPI?.getToken?.()) || null;
+    const cookieToken = CookiesStorage.getAccessToken?.() || null;
+    const accessToken = IS_DESKTOP ? desktopToken : cookieToken;
 
     if (accessToken && config?.headers) {
       config.headers['xToken'] = accessToken;
@@ -82,7 +84,14 @@ const handleError = (errorResponse: { response: AxiosResponse }) => {
 
   if ([403, 401].includes(errorResponse?.response?.status)) {
     CookiesStorage.clearSession();
-    window.location.href = '/login';
+    window.electronAPI?.removeToken?.();
+
+    // điều hướng về login theo môi trường
+    if (IS_DESKTOP) {
+      window.location.hash = '/login';
+    } else {
+      window.location.href = '/login';
+    }
   }
 
   return Promise.reject(error);

@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { PERMISSIONS, UserStatus } from '@/types';
+import { IUser, PERMISSIONS, UserStatus } from '@/types';
 import {
   ModalType,
   RequestOutCategoryLabel,
@@ -124,7 +124,7 @@ export default function RequestOutTable({
             options={StatusOption}
             disabled={
               checkIsDisableSelectByPermission(
-                userInfo,
+                userInfo as IUser,
                 PERMISSIONS.APPROVE_REQUESTS
               ) || info.getValue() !== Status.PENDING
             }

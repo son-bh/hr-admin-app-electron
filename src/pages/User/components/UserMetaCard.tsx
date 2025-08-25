@@ -2,8 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useModal } from '@/hooks/useModal';
 import { Modal } from '@/components/ui/modal';
-import { CookiesStorage } from '@/shared/utils/cookie-storage';
-import { StorageKeys } from '@/shared/constants/storage-keys';
 import InputController from '@/components/form/controller/InputController';
 import { ChangePasswordSchema } from '@/shared/constants/validation';
 import Button from '@/components/ui/button/Button';
@@ -12,6 +10,8 @@ import { toast } from '@/components/toast';
 import { USER_ROLE } from '@/configs';
 import { useState } from 'react';
 import { EyeCloseIcon, EyeIcon } from '@/icons';
+import { useUserInfo } from '@/hooks/useUserInfo';
+import { UserStatus } from '@/shared/constants';
 
 interface FormValues {
   password: string;
@@ -21,7 +21,7 @@ interface FormValues {
 
 export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
-  const userInfo = CookiesStorage.getCookieData(StorageKeys.UserInfo);
+  const { user: userInfo } = useUserInfo();
   const changePasswordMutation = useChangePasswordMutation();
   const [isSecureTextEntry, setIsSecureTextEntry] = useState({
     password: false,
@@ -73,7 +73,7 @@ export default function UserMetaCard() {
                 <div className='hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block'></div>
                 <p
                   className={`text-sm ${
-                    userInfo?.status === 'active'
+                    userInfo?.status === UserStatus.ACTIVE
                       ? 'text-green-500'
                       : 'text-gray-500'
                   }  dark:text-gray-400`}

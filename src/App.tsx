@@ -1,4 +1,4 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter, BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { ScrollToTop } from './components/common/ScrollToTop';
@@ -6,6 +6,10 @@ import Routes from './routes/Routes';
 import PageMeta from './components/common/PageMeta';
 // import { useDeployVersionCheck } from './hooks/useDeployVersionCheck';
 import { useServiceWorkerUpdater } from './sw-update-listener';
+
+const isDesktop =
+  typeof window !== 'undefined' && !!(window as any).electronAPI;
+const Router: any = isDesktop ? HashRouter : BrowserRouter;
 
 export default function App() {
   useServiceWorkerUpdater();

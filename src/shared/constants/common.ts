@@ -2,6 +2,9 @@ import { DEVICES } from '@/configs/devices';
 import { USER_TEAM } from '../../configs';
 import { USER_ROLE_SUPER_ADMIN } from '@/configs/userRole';
 
+export const IS_DESKTOP =
+  typeof window !== 'undefined' && !!(window as any).electronAPI;
+
 export const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 export const TINY_API_KEY = import.meta.env.VITE_TINY_API_KEY || '';
 

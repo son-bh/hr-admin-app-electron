@@ -7,11 +7,18 @@ import { useEffect } from 'react';
 import useUserStore from '@/store/userStore';
 import { StorageKeys } from '@/shared/constants';
 import { CookiesStorage } from '@/shared/utils/cookie-storage';
+import { useAuthStore } from '@/store/authStore';
 
 const LayoutContent = ({ children }: { children?: React.ReactNode }) => {
+  const { token, loadToken } = useAuthStore();
+
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
-  const { data } = useQueryGetMe();
+  const { data } = useQueryGetMe({ enabled: !!token });
   const setUserInfo = useUserStore(state => state.setUserInfo);
+
+  useEffect(() => {
+    loadToken();
+  }, [loadToken]);
 
   useEffect(() => {
     if (data?.data) {

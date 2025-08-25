@@ -57,7 +57,7 @@ export default function UserTable({ users, handleEditUser }: IUserListProps) {
               onClick={() => {
                 if (
                   !checkIsDisableSelectByPermission(
-                    userInfo,
+                    userInfo as IUser,
                     PERMISSIONS.VIEW_DETAIL_EMPLOYEE
                   )
                 )
@@ -128,7 +128,7 @@ export default function UserTable({ users, handleEditUser }: IUserListProps) {
           <Select
             defaultValue={info.getValue()}
             disabled={checkIsDisableSelectByPermission(
-              userInfo,
+              userInfo as IUser,
               PERMISSIONS.CHANGE_STATUS_EMPLOYEE
             )}
             options={EmployeeTypeOption}

@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { IRequestOff, PERMISSIONS, UserStatus } from '@/types';
+import { IRequestOff, IUser, PERMISSIONS, UserStatus } from '@/types';
 import {
   ModalType,
   Status,
@@ -107,7 +107,7 @@ export default function RequestOffTable({
             options={StatusOption}
             disabled={
               checkIsDisableSelectByPermission(
-                userInfo,
+                userInfo as IUser,
                 PERMISSIONS.APPROVE_REQUESTS
               ) || info.getValue() !== Status.PENDING
             }
