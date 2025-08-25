@@ -1,5 +1,9 @@
 name: Build & Release (internal)
 
+defaults:
+  run:
+    shell: bash
+
 on:
   push:
     tags:
@@ -32,8 +36,18 @@ jobs:
 
       - name: Set version from tag (strip "v")
         run: |
-          npm version "${GITHUB_REF_NAME#v}" --no-git-tag-version
-          node -p "require('./package.json').version"
+          TAG="${GITHUB_REF_NAME:-${{ github.ref_name }}}"
+          VERSION="${TAG#v}"
+          CURRENT="$(node -p "require('./package.json').version")"
+
+          echo "Tag: $TAG -> version: $VERSION (current: $CURRENT)"
+          if [ "$CURRENT" != "$VERSION" ]; then
+            npm version "$VERSION" --no-git-tag-version
+          else
+            echo "Version unchanged; skipping npm version"
+          fi
+
+          echo "PKG_VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
       - name: Build & Publish (unsigned)
         env:
@@ -49,7 +63,6 @@ jobs:
           elif [[ "${{ matrix.platform }}" == "windows" ]]; then
             npm run release -- --win
           fi
-        shell: bash
 
       - uses: actions/upload-artifact@v4
         with:
