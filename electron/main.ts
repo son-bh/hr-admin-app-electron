@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { join } from 'node:path';
 import { registerIpcHandlers } from './ipcHandlers';
@@ -12,6 +12,7 @@ autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
 
 let mainWindow: BrowserWindow | null = null;
+
 const getWindow = () => mainWindow;
 
 async function createWindow() {
@@ -48,6 +49,11 @@ async function createWindow() {
       );
     }
   );
+
+  const template: Electron.MenuItemConstructorOptions[] = [];
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
